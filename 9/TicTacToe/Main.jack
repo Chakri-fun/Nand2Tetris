@@ -1,0 +1,11 @@
+class Main{
+    function void main() {
+        var Grid grid;
+        var MainGame game;
+        let grid = Grid.new();
+        let game = MainGame.new(grid); 
+        do game.play();
+        do game.dispose();
+        return;
+    }
+}

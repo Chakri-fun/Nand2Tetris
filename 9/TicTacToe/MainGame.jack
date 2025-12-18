@@ -1,0 +1,113 @@
+class MainGame{
+    field Grid grid;
+    field char C;
+    field char U;
+    field char winner;
+
+    constructor MainGame new(Grid grid_){
+        let grid = grid_;
+        let C = 67;
+        let U = 85;
+        let winner = 0;
+        return this;
+    }
+
+    method void dispose(){
+        do grid.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method boolean check(){
+        var char now, next, last;
+        var int i;
+        let winner = 0;
+        let i = 0;
+        while (i < 3) {
+            let now = grid.Getstate(i*3);
+            let next = grid.Getstate(i*3 + 1);
+            let last = grid.Getstate(i*3 + 2);
+            if ((now = next) & (next = last) & ((now = U) | (now = C))) {
+                let winner = now;
+                return true;
+            }
+            let i = i + 1;
+        }
+        let i = 0;
+        while (i < 3) {
+            let now = grid.Getstate(i);
+            let next = grid.Getstate(i + 3);
+            let last = grid.Getstate(i + 6);
+            
+            if ((now = next) & (next = last) & ((now = U) | (now = C))) {
+                let winner = now;
+                return true;
+            }
+            let i = i + 1;
+        }
+        let now = grid.Getstate(0);
+        let next = grid.Getstate(4);
+        let last = grid.Getstate(8);
+        if ((now = next) & (next = last) & ((now = U) | (now =C))) {
+            let winner = now;
+            return true;
+        }
+        let now = grid.Getstate(2);
+        let next = grid.Getstate(4);
+        let last = grid.Getstate(6);
+        if ((now = next) & (next = last) & ((now = U) | (now = C))) {
+            let winner = now;
+            return true;
+        }
+        return false;
+    }
+
+    method void ResultScreen(){
+        if(winner = C){
+            do Output.moveCursor(12, 15);
+            do Output.printString("Sorry ! The computer has won.");
+        }
+        if(winner = U){
+            do Output.moveCursor(12, 19);
+            do Output.printString("Hurray ! You have won.");
+        }
+        if(winner = 0){
+            do Output.moveCursor(12, 23);
+            do Output.printString("It was a tie !");
+        }
+        return;
+    }
+
+    method void play(){
+        var int filled, i;
+        var char key, val;
+        var boolean found, done;
+        let filled = 0;
+        let done = false;
+        while((filled < 10) & (~done)){
+            let key = Keyboard.readChar();
+            if((key - 49) < 10 & (key - 48) > 0){
+                do grid.Updatestate((key - 49), U);
+                let filled = filled + 1;
+                let done = check();
+                if(filled < 10 & (~done)){
+                    let i = 0;
+                    let found = false;
+                    while((i < 9) & ~found){
+                        let val = grid.Getstate(i);
+                        if(~(val = U) & ~(val = C)){
+                            let found = true;
+                            do grid.Updatestate(i, C);
+                        }
+                        let i = i + 1;
+                    }
+                    let filled = filled + 1;
+                }
+            }
+            let done = check();
+        }
+        do Screen.clearScreen();
+        do ResultScreen();
+        return;
+    }
+}

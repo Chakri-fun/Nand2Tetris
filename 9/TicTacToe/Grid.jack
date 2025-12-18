@@ -1,0 +1,70 @@
+class Grid{
+    field Array state;
+    constructor Grid new(){
+        var int i, j, xstart, ystart, xdelta, ydelta;
+        var Box temp;
+        let state = Array.new(9);
+        let i = 0;
+        let xstart = 22;
+        let ystart = 4;
+        let xdelta = 10;
+        let ydelta = 7;
+        do draw();
+        while(i < 3){
+            let j = 0;
+            while(j < 3){
+                let temp = Box.new(xstart + (j * xdelta), ystart + (i * ydelta), (i*3) + j + 49);
+                let state[(i*3) + j] = temp;
+                let j = j + 1;
+            }
+            let i = i + 1;
+        }
+        return this;
+    }
+    
+    method void Updatestate(int index, char c_){
+        var Box box;
+        let box = state[index];
+        do box.Update(c_);
+        return;
+    }
+
+    method char Getstate(int index){
+        var Box box;
+        var char res;
+        let box = state[index];
+        let res = box.State();
+        return res;
+    }
+
+    method void draw() {
+        var int i, j, smallsize, curx, cury;
+        var HollowSquare mainsquare, smallsquare;
+        let mainsquare = HollowSquare.new(240, 136, 8);
+        do mainsquare.draw();
+        do mainsquare.dispose();
+        let j = 0;
+        let smallsize = 80;
+        let cury = 8;
+        while(j < 3){
+            let i = 0;
+            let curx = 136;
+            while(i < 3){
+                let smallsquare = HollowSquare.new(smallsize, curx, cury);
+                do smallsquare.draw();
+                do smallsquare.dispose();
+                let curx = curx + smallsize;
+                let i = i + 1;
+            }
+            let cury = cury + smallsize;
+            let j = j + 1;
+        }
+        return;
+    }
+
+    method void dispose() {
+        do state.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+}

@@ -1,0 +1,35 @@
+class Box{
+    field int x,y;
+    field char c;
+    constructor Box new(int x_, int y_, char c_){
+        let x = x_;
+        let y = y_;
+        let c = c_;
+        do Output.moveCursor(y_, x_);
+        do Output.printChar(c_);
+        do Output.moveCursor(22, 63);
+        do Output.backSpace();
+        return this;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method char State() {
+        return c;
+    }
+
+    method void Update(char c_){
+        //do Output.backSpace();
+        do Output.moveCursor(y, x);
+        do Output.backSpace();
+        do Output.moveCursor(y, x);
+        do Output.printChar(c_);
+        do Output.moveCursor(22, 63);
+        do Output.backSpace();
+        let c = c_;
+        return;
+    }
+}
